@@ -2,11 +2,43 @@ from flask import Flask , jsonify ,request
 import sqlite3
 import random
 import hashlib
+import dotenv
+import os
+from functools import wraps
+
+API_TOKEN = os.getenv("API_TOKEN")
+
+
+
+
 app = Flask(__name__)
 # products = [
 #         {"id":1 , "name":"keyboard" , "price":49} , {"id":2 , "name":"mouse" , "price":59} , {"id":3, "name":"headset" , "price":60}
 
 #     ]
+
+
+
+
+#protecting our API 
+
+
+def require_token(f):
+    @wraps(f)
+    def decorated(*args , **kwargs):
+        token = request.headers.get("Authorization")
+        if token != f"Bearer {API_TOKEN}":
+            return jsonify({"error":"unauthorized"}),401
+        return f(*args , **kwargs)
+    return decorated
+
+
+
+
+
+
+
+
 
 def get_db_connection():
     #how to get exact path
@@ -51,6 +83,7 @@ def get_product():
 
 
 @app.route("/products" , methods=["POST"])
+@require_token
 def add_products():
     data = request.get_json()
     name = data.get("name")
