@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flask api</title>
+    <style>
+      body{
+        font-family: sans-serif; margin: 2rem;
+      }
+      button,input{margin:0.5rem 0; padding: 0.5rem;}
+      #products{
+        margin-top: 1rem;
+      }
+
+    </style>
+</head>
+<body>
+    <h1>Flask web API</h1>
+    <button onclick="fetchproducts()">fetchproducts</button>
+    <div id="products"></div>
+    <h2>Register user</h2>
+    <input type="text"  id="regusername" placeholder="username"><br>
+    <input type="password"  id="regpassword" placeholder="password"><br>
+    <button onclick="registeruser()">Register</button>
+    <div id="registermessage"></div>
+    
+    <script>
+        const BASE_URL = "https://python-flaskdemo.onrender.com";
+        // fetching the products
+        function fetchproducts(){
+            document.getElementById("products").innerText = "..Loading...."
+            fetch(`${BASE_URL}/products`)
+            .then(res=>res.json())
+            .then(data=>{
+                const output = data.map(p=>`${p.name}-${p.price}`).join("<br>");
+                document.getElementById("products").innerHTML= output;
+            })
+            .catch(err=>{
+                console.error("failed to fetch products",err)
+                document.getElementById("products").innerText= "Error in loading the products .... "
+            })
+        }
+
+  // registering logic
+  function registeruser(){
+    const username= document.getElementById("regusername").value;
+    const password= document.getElementById("regpassword").value;
+    fetch(`${BASE_URL}/register`,{
+        method: "POST",
+        headers:{  "Content-Type":"application/json"},
+        body: JSON.stringify({username , password})
+    }).then(res=>res.json())
+    .then(response=>{
+        document.getElementById("registerMessage").innerText= response.message || response.error;
+    }).catch(err=>{
+                console.error("failed to register",err)
+                document.getElementById("registermessage").innerText= "registration error .... "
+            })
+
+
+
+  }
+    </script>
+</body>
+</html>
