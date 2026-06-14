@@ -2,10 +2,10 @@ from flask import Flask , jsonify ,request
 import sqlite3
 import random
 import hashlib
-import dotenv
+from dotenv import load_dotenv
 import os
 from functools import wraps
-
+#load_dotenv()
 API_TOKEN = os.getenv("API_TOKEN")
 
 
@@ -27,6 +27,7 @@ def require_token(f):
     @wraps(f)
     def decorated(*args , **kwargs):
         token = request.headers.get("Authorization")
+        
         if token != f"Bearer {API_TOKEN}":
             return jsonify({"error":"unauthorized"}),401
         return f(*args , **kwargs)
@@ -66,6 +67,7 @@ def init_db():
     conn.close()
     return jsonify({"mesage":"connection successful "})
 @app.route("/")
+
 def home():
     return jsonify({"message": "hello from flask server"}) #conver the json data
 @app.route("/products", methods = ["GET"])
