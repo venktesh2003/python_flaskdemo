@@ -1,4 +1,4 @@
-from flask import Flask , jsonify ,request
+from flask import Flask , jsonify ,request,render_template
 import sqlite3
 import random
 import hashlib
@@ -70,6 +70,7 @@ def init_db():
 @app.route("/")
 
 def home():
+    return render_template("web_client.html")
     return jsonify({"message": "hello from flask server"}) #conver the json data
 @app.route("/products", methods = ["GET"])
 def get_product():
