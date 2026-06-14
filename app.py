@@ -124,7 +124,7 @@ def register():
         conn = get_db_connection()
         conn.execute(""" INSERT INTO users (username , password) values (? , ?) """, (username , hashed_password))
         conn.commit()
-        conn.close
+        conn.close()
         return jsonify({"message":"user registered successfully"}),201
     except sqlite3.IntegrityError:
         return jsonify({"messsage" : "username already exist"}),409
