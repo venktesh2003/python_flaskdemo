@@ -17,7 +17,7 @@ app = Flask(__name__)
 #         {"id":1 , "name":"keyboard" , "price":49} , {"id":2 , "name":"mouse" , "price":59} , {"id":3, "name":"headset" , "price":60}
 
 #     ]
-
+CORS(app)
 
 
 
